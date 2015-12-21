@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<province>
+  <table name="onetimecall" />
+  <fields>
+    <id type="int" dbkey="onetimecall_id" noset="true" primarykey="true" />
+    <token type="string" dbkey="onetimecall_token" noset="true" />
+    <timestamp type="string" dbkey="onetimecall_timestamp" noset="true" />
+    <key type="string" dbkey="onetimecall_key" noset="true" />
+    <value type="string" dbkey="onetimecall_value" noset="true" />
+  </fields>
+  <conditions>
+    <condition name="token_value">
+        <where>onetimecall_token = %?% AND onetimecall_value = %?% AND DATE_ADD(onetimecall_timestamp, INTERVAL 7 DAY) > NOW()</where>
+        <limit>1</limit>
+    </condition>
+  </conditions>
+</province>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database>
+  <table name="dblookup" />
+  <fields>
+    <id type="int" dbkey="dblookup_id" noset="true" primarykey="true" />
+    <name type="string" dbkey="dblookup_name" noset="true" />
+    <dbName type="string" dbkey="dblookup_db_name" encoding="aes" />
+    <dbServer type="string" dbkey="dblookup_db_server" encoding="aes" />
+    <dbUser type="string" dbkey="dblookup_db_user" encoding="aes" />
+    <dbPassword type="string" dbkey="dblookup_db_password" encoding="aes" />
+    <dbPort type="int" dbkey="dblookup_db_port" />
+    <dbPersistent type="bool" dbkey="dblookup_db_persistent" />
+  </fields>
+  <conditions>
+    <condition name="id">
+        <where>dblookup_id = %?%</where>
+        <limit>1</limit>
+    </condition>
+    <condition name="name">
+        <where>dblookup_name = %?%</where>
+        <limit>1</limit>
+    </condition>
+    <condition name="all">
+        <where>dblookup_id > 0</where>
+    </condition>
+  </conditions>
+</database>

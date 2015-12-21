@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<syserror>
+  <table name="syserror" />
+  <fields>
+    <id type="int" dbkey="syserror_id" noset="true" primarykey="true" />
+    <code type="string" dbkey="syserror_code" noset="true" />
+    <string type="string" dbkey="syserror_string" noset="true" />
+    <file type="string" dbkey="syserror_file" noset="true" />
+    <line type="int" dbkey="syserror_line" noset="true" />
+    <timestamp type="timestamp" dbkey="syserror_timestamp" noset="true" />
+    <serverIp type="string" dbkey="syserror_server_ip" noset="true" />
+    <ip type="string" dbkey="syserror_ip" noset="true" />
+    <query type="string" dbkey="syserror_query" noset="true" />
+    <referer type="string" dbkey="syserror_referer" noset="true" />
+    <request type="string" dbkey="syserror_request" noset="true" />
+    <stacktrace type="string" dbkey="syserror_stacktrace" noset="true" />
+    <post type="string" dbkey="syserror_post" noset="true" />
+    <get type="string" dbkey="syserror_get" noset="true" />
+  </fields>
+  <conditions>
+    <condition name="id">
+        <where>syserror_id = %?%</where>
+        <limit>1</limit>
+    </condition>
+    <condition name="page">
+		<limit>%?%, %?%</limit>
+		<orderby>syserror_id ASC</orderby>
+    </condition>
+  </conditions>
+</syserror>
