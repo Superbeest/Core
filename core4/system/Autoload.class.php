@@ -165,12 +165,17 @@ class Autoload
                 //this is one of the slowest operations in the system
                 require_once($fullFile);
 
-                //also do a sql file existence check
-                $sqlFullfile = $basePath . $class . '.sql.php';
-                if (file_exists($sqlFullfile))
+                //only try to load the sql file when we are a class or a struct
+                if (($extension == '.class.php') ||
+                    ($extension == '.struct.php'))
                 {
-                    require_once($sqlFullfile);
-                }
+                    //also do a sql file existence check
+                    $sqlFullfile = $basePath . $class . '.sql.php';
+                    if (file_exists($sqlFullfile))
+                    {
+                        require_once($sqlFullfile);
+                    }
+                }                 
                 break;
             }
         }
