@@ -1082,7 +1082,12 @@ abstract class DynamicBaseObj extends \System\Base\BaseObj implements iDynamicBa
 					default:
 						throw new \System\Error\Exception\ObjectLoaderSourceException('Malformed XML tree. Invalid join element given.');
 				}
-
+                                
+                                //if there is a db parameter in the join, we use this database. A database name cannot be included in the quotes.
+                                if (isset($child['db']))
+                                {
+                                    $tables .= $child['db'] . '.';
+                                }
 				$tables .= '`' . $child['name'] . '` ON ';
 
 				if (!isset($child['left']))
@@ -1095,7 +1100,7 @@ abstract class DynamicBaseObj extends \System\Base\BaseObj implements iDynamicBa
 				}
 
 				$tables .= '`' . $child['left'] . '`';
-				$tables .= ' = ';
+				$tables .= ' = ';                                
 				$tables .= '`' . $child['right'] . '`';
 			}
 			$level = $child;
