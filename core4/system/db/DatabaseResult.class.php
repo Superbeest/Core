@@ -32,7 +32,7 @@ if (!defined('System'))
 * Represents a collection of database result objects. The objects will be of the given resulttype, set in the \System\Db\Query object
 * @package \System\Db
 */
-class DatabaseResult extends \System\Collection\Vector
+class DatabaseResult extends \System\Collection\SecureVector
 {
     /**
     * The amount of time in seconds before the query is considered slow.
@@ -57,9 +57,9 @@ class DatabaseResult extends \System\Collection\Vector
     * @var \System\Db\Query The query object to execute
     */
     protected $query = null;
-	/**
-	* @var Database The database that issues the request
-	*/
+    /**
+    * @var Database The database that issues the request
+    */
     protected $requestIssuer = null;
 
     /**
@@ -84,9 +84,9 @@ class DatabaseResult extends \System\Collection\Vector
     */
     protected $duration = 0;
 
-	/**
-	* @var int The total amount of items in this set
-	*/
+    /**
+    * @var int The total amount of items in this set
+    */
     protected $totalAmount = 0;
 
     /**
@@ -121,13 +121,13 @@ class DatabaseResult extends \System\Collection\Vector
         */
         if (strpos($actualQuery, 'SQL_CALC_FOUND_ROWS') !== false)
         {
-        	$query = new \System\Db\Query($database, 'SELECT FOUND_ROWS() AS amount');
-        	$this->totalAmount = $database->queryScalar($query)->first();
-		}
-		else
-		{
-			$this->totalAmount = $this->count();
-		}
+            $query = new \System\Db\Query($database, 'SELECT FOUND_ROWS() AS amount');
+            $this->totalAmount = $database->queryScalar($query)->first();
+        }
+        else
+        {
+            $this->totalAmount = $this->count();
+        }
 
         $timer->stop();
         $this->duration = $timer->getDuration();
@@ -223,7 +223,7 @@ class DatabaseResult extends \System\Collection\Vector
         {
             return 0;
         }
-	}
+    }
 
     /**
     * Creates an array with the contents of the collection.
@@ -336,15 +336,15 @@ class DatabaseResult extends \System\Collection\Vector
         }
         else
         {
-			//we apply the database to all dynamicbase objects
-			if (is_subclass_of($this->query->getResultType(), '\System\Base\DynamicBaseObj'))
-			{
+            //we apply the database to all dynamicbase objects
+            if (is_subclass_of($this->query->getResultType(), '\System\Base\DynamicBaseObj'))
+            {
             	$this->current = $this->results->fetch_object($this->query->getResultType(), array($this->requestIssuer));
-			}
-			else
-			{
-				$this->current = $this->results->fetch_object($this->query->getResultType());
-			}
+            }
+            else
+            {
+                $this->current = $this->results->fetch_object($this->query->getResultType());
+            }
         }
 
         $this->valid = !is_null($this->current);
@@ -472,9 +472,9 @@ class DatabaseResult extends \System\Collection\Vector
     {
     	if ($this->results instanceof \MySQLi_Result)
     	{
-    		return $this->results->fetch_fields();
-		}
+            return $this->results->fetch_fields();
+        }
 
-		return array();
-	}
+        return array();
+    }
 }

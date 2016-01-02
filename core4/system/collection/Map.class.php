@@ -112,7 +112,7 @@ class Map extends \System\Collection\BaseMap
         {
             $this->data[$index] = $value;
         }
-	}
+    }
 
     /**
     * Returns the amount of items in the current collection
@@ -129,7 +129,7 @@ class Map extends \System\Collection\BaseMap
     */
     public function getArrayCopy()
     {
-        return \System\Security\Sanitize::sanitizeString($this->data);
+        return $this->data;
     }
 
     /**
@@ -242,13 +242,12 @@ class Map extends \System\Collection\BaseMap
 
     /**
     * Retrieves the value from the given index.
-    * A map does NOT encode the '&' symbol.
     * @param mixed The index to return
     * @return mixed The value on that specific index
     */
     public function offsetGet($offset)
     {
-        $value = $this->keyExists($offset) ? \System\Security\Sanitize::sanitizeString($this->data[$offset], false) : null;
+        $value = $this->keyExists($offset) ? $this->data[$offset] : null;
 
         return $value;
     }

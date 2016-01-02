@@ -1,6 +1,6 @@
 <?php
 /**
-* Vector.class.php
+* SecureMap.class.php
 *
 * Copyright c 2015, SUPERHOLDER. All rights reserved.
 *
@@ -29,13 +29,31 @@ if (!defined('System'))
 }
 
 /**
-* The Vector class is non-assocative.
-* It is implemented as a non-associative collection using only nummeric
-* keys for its values.
-* This is enforced by the overridden offsetSet function
+* SecureMap is a generic container for key/value data pairs. The content in this
+* map is always sanitized.
 * @package \System\Collection
 */
-class Vector extends \System\Collection\Map
+class SecureMap extends \System\Collection\Map
 {
-    use VectorTrait;
+    /**
+    * Creates an array with the contents of the collection
+    * @return array A new array with the contents of the collection
+    */
+    public function getArrayCopy()
+    {
+        return \System\Security\Sanitize::sanitizeString($this->data);
+    }
+    
+    /**
+    * Retrieves the value from the given index.
+    * A map does NOT encode the '&' symbol.
+    * @param mixed The index to return
+    * @return mixed The value on that specific index
+    */
+    public function offsetGet($offset)
+    {
+        $value = $this->keyExists($offset) ? \System\Security\Sanitize::sanitizeString($this->data[$offset], false) : null;
+
+        return $value;
+    }
 }

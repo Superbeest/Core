@@ -1,6 +1,6 @@
 <?php
 /**
-* Vector.class.php
+* SecureVector.class.php
 *
 * Copyright c 2015, SUPERHOLDER. All rights reserved.
 *
@@ -29,13 +29,14 @@ if (!defined('System'))
 }
 
 /**
-* The Vector class is non-assocative.
+* The SecureVector class is non-assocative.
 * It is implemented as a non-associative collection using only nummeric
 * keys for its values.
+* The contents is secured
 * This is enforced by the overridden offsetSet function
 * @package \System\Collection
 */
-class Vector extends \System\Collection\Map
+class Vector extends \System\Collection\SecureMap
 {
     use VectorTrait;
 }
