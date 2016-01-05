@@ -1055,7 +1055,13 @@ abstract class DynamicBaseObj extends \System\Base\BaseObj implements iDynamicBa
 			throw new \System\Error\Exception\ObjectLoaderSourceException('Malformed XML tree. Missing name attribute in table definition.');
 		}
 
-		$tables .= '`' . $xml->table['name'] . '`';
+		//if there is a db parameter in the table, we use this database.
+        if (isset($xml->table['db']))
+        {
+            $tables .= $xml->table['db'] . '.';
+        }
+
+        $tables .= '`' . $xml->table['name'] . '`';
 
 		//we check the children of the table node to perform different types of joins, this is recursive.
 		$level = $xml->table;
@@ -1082,7 +1088,7 @@ abstract class DynamicBaseObj extends \System\Base\BaseObj implements iDynamicBa
 					default:
 						throw new \System\Error\Exception\ObjectLoaderSourceException('Malformed XML tree. Invalid join element given.');
 				}
-                                
+
                                 //if there is a db parameter in the join, we use this database. A database name cannot be included in the quotes.
                                 if (isset($child['db']))
                                 {
@@ -1100,7 +1106,7 @@ abstract class DynamicBaseObj extends \System\Base\BaseObj implements iDynamicBa
 				}
 
 				$tables .= '`' . $child['left'] . '`';
-				$tables .= ' = ';                                
+				$tables .= ' = ';
 				$tables .= '`' . $child['right'] . '`';
 			}
 			$level = $child;
