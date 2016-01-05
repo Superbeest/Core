@@ -36,7 +36,20 @@ if (!defined('System'))
 * This is enforced by the overridden offsetSet function
 * @package \System\Collection
 */
-class Vector extends \System\Collection\SecureMap
+class SecureVector extends \System\Collection\SecureMap
 {
     use VectorTrait;
+    
+    /**
+    * Returns a subset of the given collection in the stored order. The order is preserved.
+    * When more items are requested than available, the result will be shortened.
+    * @param int The first index to return
+    * @param int The amount of items to return
+    * @return SecureVector A new collection with the given items.
+    */
+    public function slice($offset, $length)
+    {
+    	$data = $this->getArrayCopy();
+    	return new \System\Collection\SecureVector(array_slice($data, $offset, $length, false));
+    }
 }

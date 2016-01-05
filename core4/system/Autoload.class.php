@@ -167,7 +167,8 @@ class Autoload
 
                 //only try to load the sql file when we are a class or a struct
                 if (($extension == '.class.php') ||
-                    ($extension == '.struct.php'))
+                    ($extension == '.struct.php') ||
+                    ($extension == '.event.php'))
                 {
                     //also do a sql file existence check
                     $sqlFullfile = $basePath . $class . '.sql.php';

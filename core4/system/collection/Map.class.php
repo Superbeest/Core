@@ -35,9 +35,9 @@ if (!defined('System'))
 class Map extends \System\Collection\BaseMap
 {
     /**
-    * @var array The container for all the data
+    * @var array The container for all the data. Do not access directly
     */
-    private $data = array();
+    protected $data = array();
 
     /**
     * @var string The type of data we allow to store (or null for all)

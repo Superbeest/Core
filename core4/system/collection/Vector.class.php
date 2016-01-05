@@ -38,4 +38,17 @@ if (!defined('System'))
 class Vector extends \System\Collection\Map
 {
     use VectorTrait;
+    
+    /**
+    * Returns a subset of the given collection in the stored order. The order is preserved.
+    * When more items are requested than available, the result will be shortened.
+    * @param int The first index to return
+    * @param int The amount of items to return
+    * @return Vector A new collection with the given items.
+    */
+    public function slice($offset, $length)
+    {
+    	$data = $this->getArrayCopy();
+    	return new \System\Collection\Vector(array_slice($data, $offset, $length, false));
+    }
 }
