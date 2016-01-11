@@ -85,7 +85,7 @@ class APIGen extends \System\Base\StaticBase
 		}
 
 		$vec = \System\Module\Module::getAllModules();
-		echo '<pre>';
+		//echo '<pre>';
 		$moduleList = new \System\Collection\Vector();
 		foreach ($vec as $module)
 		{

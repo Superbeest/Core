@@ -132,7 +132,7 @@ class Call extends \System\Base\StaticBase
     * @param mixed The postdata to send. If this is null, then a normal GET request is done. Not supported if cURL is not present.
     * @param string The user agent to use. Default is the Firefox 3.6 browser under a Win7 environment.
     * @param string The referer to use for redirects. Not supported if cURL is not present.
-    * @param string A proxy url to connect through. This url requires a protocol (ex: http://localhost:8118)
+    * @param string A proxy url to connect through. This url requires a protocol (ex: http://localhost:8118). Without http://, it assumes SOCKS5
     * @param array The return headers by reference
     * @param array Optional custom headers. If custom headers are given, no default headers will be used.
     * @param int The amount of seconds to wait before a timeout
@@ -169,6 +169,10 @@ class Call extends \System\Base\StaticBase
             if (!empty($proxyUrl))
             {
                 curl_setopt($curl, CURLOPT_PROXY, $proxyUrl);
+                if (strpos($proxyUrl, 'http://') === false)
+                {
+                    curl_setopt($curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+                }
             }
 
             //there is data we want to post, so we do a POST instead of a GET

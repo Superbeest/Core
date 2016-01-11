@@ -451,16 +451,20 @@ class BaseObj implements \System\Base\iBaseObj
 
 	/**
 	* Does nothing from an instance context
+        * @return bool Always true
 	*/
     public final function doNothing()
     {
+        return true;
 	}
 
 	/**
 	* Does nothing from a static context
+        * @return bool Always true
 	*/
 	public static final function doNothingStatic()
 	{
+            return true;
 	}
 
     /**
