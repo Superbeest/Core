@@ -76,6 +76,38 @@ class Directory extends \System\Base\Base
     }
 
     /**
+    * Returns a transformed path, suitable for the current OS.
+    * Also fixes double slashes to single slashes, and validates the path.
+    * Default adds a trailing slash.
+    * @param string The path to convert for the current OS.
+    * @param string The separator to use. When null, the system default is used.
+    * @return string Returns the path, suitable for the current OS, or false.
+    */
+    public static final function normalize($path, $separator = null)
+    {
+        $slash = self::getSeparator();
+        if ($separator != null)
+        {
+            $slash = $separator;
+        }
+
+        $path = realpath($path);
+        if (!$path)
+        {
+            return false;
+        }
+
+        $path .= $slash;
+
+        $path = str_replace('\\\\', '\\', $path);
+        $path = str_replace('//', '/', $path);
+        $path = str_ireplace("/", $slash, $path);
+        $path = str_ireplace("\\", $slash, $path);
+
+        return $path;
+    }
+
+    /**
     * Creates a new directory on disk.
     * The rights given are octal. The directory will be created recursively.
     * @param string The path to be given

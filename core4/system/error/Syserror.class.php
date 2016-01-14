@@ -40,7 +40,7 @@ class Syserror extends \System\Base\DynamicBaseObj
     */
     public static final function getXMLSourceFile()
     {
-        return PATH_SYSTEM . 'error\syserror.xml';
+        return PATH_SYSTEM . 'error/syserror.xml';
     }
 
 	/**

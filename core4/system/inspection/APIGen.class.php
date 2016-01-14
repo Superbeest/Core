@@ -119,8 +119,8 @@ class APIGen extends \System\Base\StaticBase
 			$reflectionClass = new \ReflectionClass($interface);
 
 			if (($reflectionClass->getFileName() != '') &&
-				((strpos(\System\IO\Directory::getPath($reflectionClass->getFileName()), \System\IO\Directory::getPath(PATH_MODULES)) !== false) ||
-				 (strpos(\System\IO\Directory::getPath($reflectionClass->getFileName()), \System\IO\Directory::getPath(PATH_SYSTEM)) !== false)))
+				((strpos(\System\IO\Directory::normalize($reflectionClass->getFileName()), \System\IO\Directory::normalize(PATH_MODULES)) !== false) ||
+				 (strpos(\System\IO\Directory::normalize($reflectionClass->getFileName()), \System\IO\Directory::normalize(PATH_SYSTEM)) !== false)))
 			{
 				self::generateClassDocumentation($targetFolder, $reflectionClass);
 			}
@@ -131,8 +131,8 @@ class APIGen extends \System\Base\StaticBase
 			$reflectionClass = new \ReflectionClass($class);
 
 			if (($reflectionClass->getFileName() != '') &&
-				((strpos(\System\IO\Directory::getPath($reflectionClass->getFileName()), \System\IO\Directory::getPath(PATH_MODULES)) !== false) ||
-				 (strpos(\System\IO\Directory::getPath($reflectionClass->getFileName()), \System\IO\Directory::getPath(PATH_SYSTEM)) !== false)))
+				((strpos(\System\IO\Directory::normalize($reflectionClass->getFileName()), \System\IO\Directory::normalize(PATH_MODULES)) !== false) ||
+				 (strpos(\System\IO\Directory::normalize($reflectionClass->getFileName()), \System\IO\Directory::normalize(PATH_SYSTEM)) !== false)))
 			{
 				self::generateClassDocumentation($targetFolder, $reflectionClass);
 			}
@@ -455,6 +455,7 @@ class APIGen extends \System\Base\StaticBase
 					$code .= '/**' . "\r\n";
 					$code .= '* Gets the ' . $method->getName() . ' property. [DYNAMICBASE]' . "\r\n";
 
+                                        $append = '';
 					switch (strtolower($method['type']))
 					{
 						case 'timestamp':
@@ -467,12 +468,12 @@ class APIGen extends \System\Base\StaticBase
 							//if the class has the method already defined, we skip the field function definition
 							if (!$class->hasMethod('is' . ucfirst($method->getName())))
 							{
-								$code .= '/**' . "\r\n";
-								$code .= '* Gets the boolean result of the ' . $method->getName() . ' property. [DYNAMICBASE]' . "\r\n";
-								$code .= '* @return bool Boolean evaluation of the property value' . "\r\n";
-								$code .= '*/' . "\r\n";
-								$code .= 'public function is' . ucfirst($method->getName()) . '() {}';
-								$code .= "\r\n\r\n";
+								$append = '/**' . "\r\n";
+								$append .= '* Gets the boolean result of the ' . $method->getName() . ' property. [DYNAMICBASE]' . "\r\n";
+								$append .= '* @return bool Boolean evaluation of the property value' . "\r\n";
+								$append .= '*/' . "\r\n";
+								$append .= 'public function is' . ucfirst($method->getName()) . '() {}';
+								$append .= "\r\n\r\n";
 							}
 							break;
 						case 'int':
@@ -493,6 +494,12 @@ class APIGen extends \System\Base\StaticBase
 						$code .= '*/' . "\r\n";
 						$code .= 'public function get' . ucfirst($method->getName()) . '() {}';
 						$code .= "\r\n\r\n";
+					}
+
+                                        //if the class has the method already defined, we skip the field function definition
+					if (!$class->hasMethod('is' . ucfirst($method->getName())))
+					{
+						$code .= $append;
 					}
 				}
 			}
@@ -815,7 +822,7 @@ class APIGen extends \System\Base\StaticBase
 	private static final function storeToFile(\System\IO\Directory $targetFolder, \ReflectionClass $class, $code)
 	{
 		//store the contents to a file
-		$targetFolderStr = \System\IO\Directory::getPath($targetFolder->getCurrentPath() . strtolower($class->getNamespaceName()) . \System\IO\Directory::getSeparator());
+		$targetFolderStr = \System\IO\Directory::getPath($targetFolder->getCurrentPath(true) . strtolower($class->getNamespaceName()) . \System\IO\Directory::getSeparator());
 		if (!file_exists($targetFolderStr))
 		{
 			mkdir($targetFolderStr, 0777, true);

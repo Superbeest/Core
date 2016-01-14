@@ -59,7 +59,7 @@ final class Database extends \System\Base\DynamicBaseObj
     */
     public static function getXMLSourceFile()
     {
-        return PATH_SYSTEM . 'db\lookup\database.xml';
+        return PATH_SYSTEM . 'db/lookup/database.xml';
     }
 
 	/**
