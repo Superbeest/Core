@@ -288,7 +288,7 @@ class File extends \System\Base\Base
     public final function stripBase($base)
     {
         $path = $this->getFullPath();
-        $base = \System\IO\Directory::getPath($base);
+        $base = \System\IO\Directory::normalize($base) ?: \System\IO\Directory::getPath($base);
 
         $startPos = stripos($path, $base);
         if (($startPos !== false) &&

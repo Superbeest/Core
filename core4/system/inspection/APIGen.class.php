@@ -101,7 +101,7 @@ class APIGen extends \System\Base\StaticBase
 			$found = false;
 			foreach ($moduleList as $entry)
 			{
-				if (stripos($base, $entry) === 0)
+				if (stripos(str_replace('\\', '/', $base), str_replace('\\', '/', $entry)) === 0)
 				{
 					$found = true;
 					break;
