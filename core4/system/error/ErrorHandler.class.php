@@ -350,6 +350,10 @@ class ErrorHandler extends \System\Base\SingletonBase
         //because we dont want to be dependant of the system
 
         $errorPage = self::ERRORPAGE;
+        if (defined('ERRORPAGE_CUSTOM'))
+        {
+            $errorPage = constant('ERRORPAGE_CUSTOM');
+        }
 
         if ((defined('DATABASE_HOST')) &&
             (defined('DATABASE_USER')) &&
