@@ -81,21 +81,27 @@ class Image extends \System\Image\Image
         imagefill($this->image, 0, 0, $color);
 	}
 
-	/**
-	* Creates a new image object from the given GD resource
-	* @param resource The GD image resource
-	* @return Image
-	*/
-	public static function createFromGD($imageData)
-	{
-		$x = imagesx($imageData);
-		$y = imagesy($imageData);
+    public static function createFromString($imageData)
+    {
+        $gd = imagecreatefromstring($imageData);
+        return self::createFromGD($gd);
+    }
 
-		$image = new Image($x, $y);
-		$image->image = $imageData;
+    /**
+    * Creates a new image object from the given GD resource
+    * @param resource The GD image resource
+    * @return Image
+    */
+    public static function createFromGD($imageData)
+    {
+        $x = imagesx($imageData);
+        $y = imagesy($imageData);
 
-		return $image;
-	}
+        $image = new Image($x, $y);
+        $image->image = $imageData;
+
+        return $image;
+    }
 
     private static final function setMemoryRequirements($imageInformation)
     {

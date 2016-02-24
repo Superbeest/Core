@@ -232,6 +232,8 @@ class Hook extends \System\Base\StaticBase
             {
                 if (is_callable($postHook))
                 {
+                    //add the return value to the parameters
+                    array_push($arguments, $returnValue);
                     self::call($postHook, $arguments);
                 }
             }

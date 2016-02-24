@@ -120,8 +120,8 @@
 		var rootURL = '<xsl:value-of select="$publicRoot" />';
 	</script>
 
-	<xsl:apply-templates select="//cssfiles" />
-	<xsl:apply-templates select="//jsfiles" />
+	<xsl:apply-templates select="//cssfiles/cssfile[location=0]" />
+	<xsl:apply-templates select="//jsfiles/jsfile[location=0]" />
 
 	<xsl:apply-templates select="//customheadblocks" />
 
@@ -140,8 +140,12 @@
 </head>
 <body>
 	<xsl:call-template name="siteframe" />
+        <xsl:apply-templates select="//cssfiles/cssfile[location='1']" />
+	<xsl:apply-templates select="//jsfiles/jsfile[location='1']" />
 </body>
 </html>
+<xsl:apply-templates select="//cssfiles/cssfile[location='2']" />
+<xsl:apply-templates select="//jsfiles/jsfile[location='2']" />
 
 </xsl:template>
 

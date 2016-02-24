@@ -147,24 +147,24 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function getPageOptions()
 	{
-		$map = new \System\Collection\Map();
-		$map->title = $this->getTitle();
-		$map->keywords = $this->getKeywords();
-		$map->description = $this->getDescription();
+            $map = new \System\Collection\Map();
+            $map->title = $this->getTitle();
+            $map->keywords = $this->getKeywords();
+            $map->description = $this->getDescription();
 
-		$map->publicRoot = PUBLIC_ROOT;
-		$map->queryTime = array('\System\Db\Database', 'getTotalQueryTime');
-		$map->queryAmount = array('\System\Db\Database', 'getTotalQueryCount');
-		$map->executionTime = array('\System\Calendar\Timer', 'getSystemExecutionTime');
-		$map->sessionHandler = array('\System\HTTP\Storage\Session', 'getCurrentHandler');
-		$map->debugMode = defined('DEBUG');
-		$map->language = \System\Internationalization\Language::c_getPrimaryLanguage(\System\Internationalization\Language::c_getLanguage());
-		$map->company = $this->getCompany();
+            $map->publicRoot = PUBLIC_ROOT;
+            $map->queryTime = array('\System\Db\Database', 'getTotalQueryTime');
+            $map->queryAmount = array('\System\Db\Database', 'getTotalQueryCount');
+            $map->executionTime = array('\System\Calendar\Timer', 'getSystemExecutionTime');
+            $map->sessionHandler = array('\System\HTTP\Storage\Session', 'getCurrentHandler');
+            $map->debugMode = defined('DEBUG');
+            $map->language = \System\Internationalization\Language::c_getPrimaryLanguage(\System\Internationalization\Language::c_getLanguage());
+            $map->company = $this->getCompany();
 
-		$map->browser = \System\HTTP\Visitor\Browser::c_getBrowser();
-		$map->browserVersion = \System\HTTP\Visitor\Browser::c_getBrowserVersion();
+            $map->browser = \System\HTTP\Visitor\Browser::c_getBrowser();
+            $map->browserVersion = \System\HTTP\Visitor\Browser::c_getBrowserVersion();
 
-		return $map;
+            return $map;
 	}
 
 	/**
@@ -175,11 +175,11 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function outputTitleXML(\System\Cache\PageCache\Block $block)
 	{
-		$xml = \System\XML\XML::createXMLRoot();
+            $xml = \System\XML\XML::createXMLRoot();
 
-		$xml->title = \System\Security\Sanitize::sanitizeString((string)$block->title, false, false, true, true, false, false);
+            $xml->title = \System\Security\Sanitize::sanitizeString((string)$block->title, false, false, true, true, false, false);
 
-		return $xml;
+            return $xml;
 	}
 
 	/**
@@ -191,30 +191,30 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function outputDescriptionXML(\System\Cache\PageCache\Block $block)
 	{
-		$xml = \System\XML\XML::createXMLRoot();
+            $xml = \System\XML\XML::createXMLRoot();
 
-		$description = \System\Security\Sanitize::sanitizeString((string)$block->description, false, false, true, true, false, false);
+            $description = \System\Security\Sanitize::sanitizeString((string)$block->description, false, false, true, true, false, false);
 
-		$words = str_word_count($description, 1);
-		$amount = self::DESCRIPTION_XML_WORD_AMOUNT;
+            $words = str_word_count($description, 1);
+            $amount = self::DESCRIPTION_XML_WORD_AMOUNT;
 
-		if (isset($block->amount))
-		{
-			$amount = (int)$block->amount;
-		}
+            if (isset($block->amount))
+            {
+                $amount = (int)$block->amount;
+            }
 
-		$words = array_slice($words, 0, $amount);
+            $words = array_slice($words, 0, $amount);
 
-		$desc = implode(' ', $words);
+            $desc = implode(' ', $words);
 
-		if (strlen($desc) < strlen($description))
-		{
-			$desc .= '...';
-		}
+            if (strlen($desc) < strlen($description))
+            {
+                $desc .= '...';
+            }
 
-		$xml->description = $desc;
+            $xml->description = $desc;
 
-		return $xml;
+            return $xml;
 	}
 
 	/**
@@ -225,11 +225,11 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function outputKeywordsXML(\System\Cache\PageCache\Block $block)
 	{
-		$xml = \System\XML\XML::createXMLRoot();
+            $xml = \System\XML\XML::createXMLRoot();
 
-		$xml->keywords = \System\Security\Sanitize::sanitizeString((string)$block->keywords, false, false, true, true, false, false);
+            $xml->keywords = \System\Security\Sanitize::sanitizeString((string)$block->keywords, false, false, true, true, false, false);
 
-		return $xml;
+            return $xml;
 	}
 
 	/**
@@ -240,15 +240,15 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function addToBreadCrumb(\SimpleXMLElement $xml, $text, $link)
 	{
-		if (!isset($xml->breadcrumbs))
-		{
-			$xml->addChild('breadcrumbs');
-		}
-		$crumbs = $xml->breadcrumbs;
+            if (!isset($xml->breadcrumbs))
+            {
+                $xml->addChild('breadcrumbs');
+            }
+            $crumbs = $xml->breadcrumbs;
 
-		$c = $crumbs->addChild('crumb');
-		$c->name = $text;
-		$c->link = $link;
+            $c = $crumbs->addChild('crumb');
+            $c->name = $text;
+            $c->link = $link;
 	}
 
 	/**
@@ -258,40 +258,42 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	* @param string The (full)path to the remote file
 	* @param string The media type, defaults to CSS_MEDIA_SCREEN
 	* @param string The reltype, defaults to CSS_REL_DEFAULT
+        * @param int \System\Web\BasePage\Page\InclusionLocation location for placement
 	*/
-	public function addCSSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $media = \System\Web\BasePage\Page\BasePage::CSS_MEDIA_SCREEN, $rel = \System\Web\BasePage\Page\BasePage::CSS_REL_DEFAULT)
+	public function addCSSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $media = \System\Web\BasePage\Page\BasePage::CSS_MEDIA_SCREEN, $rel = \System\Web\BasePage\Page\BasePage::CSS_REL_DEFAULT, $location = \System\Web\BasePage\Page\InclusionLocation::LOCATION_HEAD)
 	{
-		if (!isset($xml->cssfiles))
-		{
-			$xml->addChild('cssfiles');
-		}
-		$cssFiles = $xml->cssfiles;
+            if (!isset($xml->cssfiles))
+            {
+                $xml->addChild('cssfiles');
+            }
+            $cssFiles = $xml->cssfiles;
 
-		$cssFile = $cssFiles->addChild('cssfile');
-		$cssFile->addChild('media', $media);
-		$cssFile->addChild('rel', $rel);
+            $cssFile = $cssFiles->addChild('cssfile');
+            $cssFile->addChild('media', $media);
+            $cssFile->addChild('rel', $rel);
 
-		if ($localFile)
-		{
-			$file = new \System\IO\File($localFile);
-			if ((('.' . $file->getExtension()) == self::CSS_EXTENSION) && //only try to minify css files, not less files
-				(MINIFY_ENABLE) &&
-				(mb_strpos($file->getFilename(), self::CSS_MIN_EXTENSION) === false)) //it is not already minified
-			{
-				$localMinFile = $file->getPath() . basename($file->getFilename(), self::CSS_EXTENSION) . self::CSS_MIN_EXTENSION;
-				if (!file_exists($localMinFile))
-				{
-					$file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\CSS\Minify::minify($file->getContents()));
-				}
-				else
-				{
-					$file = new \System\IO\File($localMinFile);
-				}
-				$remoteFile = str_ireplace(self::CSS_EXTENSION, self::CSS_MIN_EXTENSION, $remoteFile);
-			}
-			$cssFile->addChild('filesize', $file->getFileSizeInBytes());
-		}
-		$cssFile->addChild('name', $remoteFile);
+            if ($localFile)
+            {
+                $file = new \System\IO\File($localFile);
+                if ((('.' . $file->getExtension()) == self::CSS_EXTENSION) && //only try to minify css files, not less files
+                    (MINIFY_ENABLE) &&
+                    (mb_strpos($file->getFilename(), self::CSS_MIN_EXTENSION) === false)) //it is not already minified
+                {
+                    $localMinFile = $file->getPath() . basename($file->getFilename(), self::CSS_EXTENSION) . self::CSS_MIN_EXTENSION;
+                    if (!file_exists($localMinFile))
+                    {
+                        $file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\CSS\Minify::minify($file->getContents()));
+                    }
+                    else
+                    {
+                        $file = new \System\IO\File($localMinFile);
+                    }
+                    $remoteFile = str_ireplace(self::CSS_EXTENSION, self::CSS_MIN_EXTENSION, $remoteFile);
+                }
+                $cssFile->addChild('filesize', $file->getFileSizeInBytes());
+            }
+            $cssFile->addChild('name', $remoteFile);
+            $cssFile->addChild('location', $location);
 	}
 
 	/**
@@ -304,21 +306,21 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function addCustomMeta(\SimpleXMLElement $xml, $name = '', $property = '', $content = '', $httpEquiv = '', $scheme = '')
 	{
-		if (!isset($xml->custommetas))
-		{
-			$xml->addChild('custommetas');
-		}
-		$metas = $xml->custommetas;
+            if (!isset($xml->custommetas))
+            {
+                $xml->addChild('custommetas');
+            }
+            $metas = $xml->custommetas;
 
-		$meta = $metas->addChild('meta');
-		$meta->addChild('property', $property);
-		$meta->addChild('name', $name);
-		$meta->addChild('http-equiv', $httpEquiv);
+            $meta = $metas->addChild('meta');
+            $meta->addChild('property', $property);
+            $meta->addChild('name', $name);
+            $meta->addChild('http-equiv', $httpEquiv);
 
-		$content = \System\Security\Sanitize::sanitizeString((string)$content, true, false, true, true, false, false);
+            $content = \System\Security\Sanitize::sanitizeString((string)$content, true, false, true, true, false, false);
 
-		$meta->addChild('content', $content);
-		$meta->addChild('scheme', $scheme);
+            $meta->addChild('content', $content);
+            $meta->addChild('scheme', $scheme);
 	}
 
 	/**
@@ -337,22 +339,22 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function addCustomLink(\SimpleXMLElement $xml, $rel = '', $type = '', $href = '', $media = '', $charset = '', $hreflang = '', $rev = '', $sizes = '', $target = '')
 	{
-		if (!isset($xml->customlinks))
-		{
-			$xml->addChild('customlinks');
-		}
-		$links = $xml->customlinks;
+            if (!isset($xml->customlinks))
+            {
+                $xml->addChild('customlinks');
+            }
+            $links = $xml->customlinks;
 
-		$link = $links->addChild('link');
-		$link->addChild('rel', $rel);
-		$link->addChild('type', $type);
-		$link->addChild('href', $href);
-		$link->addChild('media', $media);
-		$link->addChild('charset', $charset);
-		$link->addChild('hreflang', $hreflang);
-		$link->addChild('rev', $rev);
-		$link->addChild('sizes', $sizes);
-		$link->addChild('target', $target);
+            $link = $links->addChild('link');
+            $link->addChild('rel', $rel);
+            $link->addChild('type', $type);
+            $link->addChild('href', $href);
+            $link->addChild('media', $media);
+            $link->addChild('charset', $charset);
+            $link->addChild('hreflang', $hreflang);
+            $link->addChild('rev', $rev);
+            $link->addChild('sizes', $sizes);
+            $link->addChild('target', $target);
 	}
 
 	/**
@@ -360,37 +362,39 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	* @param \SimpleXMLElement The XML root
 	* @param string The (full)path to the local JS file
 	* @param string The (full)path to the remote file
+        * @param int The \System\Web\BasePage\Page\InclusionLocation for inclusion location
 	*/
-	public function addJSFile(\SimpleXMLElement $xml, $localFile, $remoteFile)
+	public function addJSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $location = \System\Web\BasePage\Page\InclusionLocation::LOCATION_HEAD)
 	{
-		if (!isset($xml->jsfiles))
-		{
-			$xml->addChild('jsfiles');
-		}
-		$jsFiles = $xml->jsfiles;
+            if (!isset($xml->jsfiles))
+            {
+                $xml->addChild('jsfiles');
+            }
+            $jsFiles = $xml->jsfiles;
 
-		$jsFile = $jsFiles->addChild('jsfile');
-		if ($localFile)
-		{
-			$file = new \System\IO\File($localFile);
-			if ((MINIFY_ENABLE) &&
-				(mb_strpos($file->getFilename(), self::JS_MIN_EXTENSION) === false) && //it is not already minified
-				(mb_strpos($file->getFilename(), self::JS_MIN_PACKED) === false)) //it is not packed
-			{
-				$localMinFile = $file->getPath() . basename($file->getFilename(), self::JS_EXTENSION) . self::JS_MIN_EXTENSION;
-				if (!file_exists($localMinFile))
-				{
-					$file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\JS\Minify::minify($file->getContents()));
-				}
-				else
-				{
-					$file = new \System\IO\File($localMinFile);
-				}
-				$remoteFile = str_ireplace(self::JS_EXTENSION, self::JS_MIN_EXTENSION, $remoteFile);
-			}
-			$jsFile->addChild('filesize', $file->getFileSizeInBytes());
-		}
-		$jsFile->addChild('name', $remoteFile);
+            $jsFile = $jsFiles->addChild('jsfile');
+            if ($localFile)
+            {
+                $file = new \System\IO\File($localFile);
+                if ((MINIFY_ENABLE) &&
+                    (mb_strpos($file->getFilename(), self::JS_MIN_EXTENSION) === false) && //it is not already minified
+                    (mb_strpos($file->getFilename(), self::JS_MIN_PACKED) === false)) //it is not packed
+                {
+                    $localMinFile = $file->getPath() . basename($file->getFilename(), self::JS_EXTENSION) . self::JS_MIN_EXTENSION;
+                    if (!file_exists($localMinFile))
+                    {
+                        $file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\JS\Minify::minify($file->getContents()));
+                    }
+                    else
+                    {
+                        $file = new \System\IO\File($localMinFile);
+                    }
+                    $remoteFile = str_ireplace(self::JS_EXTENSION, self::JS_MIN_EXTENSION, $remoteFile);
+                }
+                $jsFile->addChild('filesize', $file->getFileSizeInBytes());
+            }
+            $jsFile->addChild('name', $remoteFile);
+            $jsFile->addChild('location', $location);
 	}
 
 	/**
@@ -402,12 +406,12 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	*/
 	public function addCustomHeadBlock(\SimpleXMLElement $xml, $block)
 	{
-		if (!isset($xml->customheadblocks))
-		{
-			$xml->addChild('customheadblocks');
-		}
-		$customHeadBlock = $xml->customheadblocks;
+            if (!isset($xml->customheadblocks))
+            {
+                $xml->addChild('customheadblocks');
+            }
+            $customHeadBlock = $xml->customheadblocks;
 
-		$customHeadBlock->addChild('customheadblock', $block);
+            $customHeadBlock->addChild('customheadblock', $block);
 	}
 }
