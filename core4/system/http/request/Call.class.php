@@ -138,7 +138,7 @@ class Call extends \System\Base\StaticBase
     * @param int The amount of seconds to wait before a timeout
     * @return mixed The html contents or false for an error.
     */
-    public static final function httpPageRequest($url, $postData = null, $userAgent = self::USERAGENT_FIREFOX_36, $referer = self::REFERER_GOOGLE, $proxyUrl = '', &$returnHeaders = array(), array $header = array(), $timeout = self::SYNC_TIMEOUT)
+    public static final function httpPageRequest($url, $postData = null, $userAgent = self::USERAGENT_FIREFOX_36, $referer = self::REFERER_GOOGLE, $proxyUrl = '', array &$returnHeaders = array(), array $header = array(), $timeout = self::SYNC_TIMEOUT, array &$requestHeaders = array())
     {
         $returnValue = false;
 
@@ -204,6 +204,7 @@ class Call extends \System\Base\StaticBase
 			{
 				$headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
 				$returnHeaders = preg_split('/$\R?^/m', substr($returnValue, 0, $headerSize));
+                                $requestHeaders = curl_getinfo($curl, CURLINFO_HEADER_OUT);
 				$returnValue = substr($returnValue, $headerSize);
 			}
             curl_close($curl);

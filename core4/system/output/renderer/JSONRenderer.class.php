@@ -56,5 +56,16 @@ class JSONRenderer extends \System\Output\Renderer
 
         $this->addToBuffer($output);
     }
+
+    /**
+    * Returns the header suggestions for the current Renderer.
+    * Specific Renderers may override this function to provide render suggestions to the RenderSurface.
+    * Do note that the RenderSurface may ignore the given suggestions.
+    * @param \System\Collection\Vector The header suggestions.
+    */
+    public final function getHeaderSuggestions()
+    {
+        return new \System\Collection\Vector('Content-Type: application/json');
+    }
 }
 

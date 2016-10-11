@@ -150,12 +150,6 @@ function __bootloader()
         throw new \Exception('Could not load ' . $autoloader . '. Please check the PATH_SYSTEM constant in your configuration!');
     }
 
-    //debug parameters when the platform is our development platform
-    if (\System\Server\OS::getOS() == \System\Server\OS::OS_WINDOWS)
-    {
-        defined('DEBUG') ||	define ('DEBUG', null);
-    }
-
 	register_shutdown_function('\System\Db\Database::handleShutdown');
 
     //boot the errorhandler and register the exception and error handlers

@@ -43,10 +43,10 @@ abstract class BaseController extends \System\Web\Controller
     }
 
     /**
-	* Output the given Page and set the renderer and rendersurface
-	* @param \System\Web\BasePage\Page\BasePage The Page to output
-	*/
-	protected function renderDefault(\System\Web\BasePage\Page\BasePage $page)
+    * Output the given Page and set the renderer and rendersurface
+    * @param \System\Web\BasePage\Page\BasePage The Page to output
+    */
+    protected function renderDefault(\System\Web\BasePage\Page\BasePage $page)
     {
         $renderer = $page->getRenderer();
         $surface = \System\Output\RenderSurface::getSurface('\System\Output\GZIPBufferSurface');
@@ -60,17 +60,17 @@ abstract class BaseController extends \System\Web\Controller
 	*/
     protected function renderRedirect($url)
     {
-		$renderer = new \System\Output\Renderer\RedirectRenderer();
+        $renderer = new \System\Output\Renderer\RedirectRenderer();
         $renderer->render($url);
         $surface = \System\Output\RenderSurface::getSurface('\System\Output\GZIPBufferSurface');
         $surface->setRenderer($renderer);
         $this->setRenderSurface($surface);
-	}
+    }
 
-	/**
-	* Output the given XML and set the renderer and rendersurface
-	* @param \SimpleXMLElement The XML to output
-	*/
+    /**
+    * Output the given XML and set the renderer and rendersurface
+    * @param \SimpleXMLElement The XML to output
+    */
     protected function renderXML($xml)
     {
     	$renderer = new \System\Output\Renderer\XMLRenderer();
@@ -79,19 +79,19 @@ abstract class BaseController extends \System\Web\Controller
     	$renderSurface = \System\Output\RenderSurface::getSurface('\System\Output\GZIPBufferSurface');
     	$renderSurface->setRenderer($renderer);
     	$this->setRenderSurface($renderSurface);
-	}
+    }
 
-	/**
-	* Output the given JSON and set the renderer and rendersurface
-	* @param mixed The object to output as JSON
-	*/
-	protected function renderJSON($json)
-	{
-		$renderer = new \System\Output\Renderer\JSONRenderer();
+    /**
+    * Output the given JSON and set the renderer and rendersurface
+    * @param mixed The object to output as JSON
+    */
+    protected function renderJSON($json)
+    {
+        $renderer = new \System\Output\Renderer\JSONRenderer();
     	$renderer->render($json, 0);
 
     	$renderSurface = \System\Output\RenderSurface::getSurface('\System\Output\GZIPBufferSurface');
     	$renderSurface->setRenderer($renderer);
     	$this->setRenderSurface($renderSurface);
-	}
+    }
 }

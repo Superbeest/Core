@@ -81,7 +81,7 @@ class IP extends \System\HTTP\ServerBase
 		}
 
         $val = new \System\Security\Validate();
-        if ($val->isIPAddress($ip, 'ip', true, true, false, false, true) == \System\Security\ValidateResult::VALIDATE_OK)
+        if ($val->isIPAddress($ip, 'ip', true, true, true, false, true) == \System\Security\ValidateResult::VALIDATE_OK)
         {
             if ($shortHand)
             {

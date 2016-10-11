@@ -43,7 +43,11 @@ class Interactionrcv extends \System\Web\Controller
     */
     protected function deployServices(\System\Collection\Vector $services)
     {
-		$services[] = new \System\Web\ServiceEntry('\System\System\Interaction\Service\InteractionRcv::interact', 'interact', \System\Web\ServiceEntry::ACTIONTYPE_GET);
+		//when the INTERACTION_COMMUNICATION_DISABLED constant is defined, we ignore the handling of remote administation
+        if (!defined('INTERACTION_COMMUNICATION_DISABLED'))
+        {
+            $services[] = new \System\Web\ServiceEntry('\System\System\Interaction\Service\InteractionRcv::interact', 'interact', \System\Web\ServiceEntry::ACTIONTYPE_GET);
+        }
     }
 
 	/**
