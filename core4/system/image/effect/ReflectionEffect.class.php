@@ -147,7 +147,7 @@ class ReflectionEffect extends \System\Image\Effect\ImageEffect
         }
 
         /** @var \Imagick */
-        $reflection = $imageData->clone();
+        $reflection = clone $imageData;
         $reflection->flipImage();
 
         $gradient = new \Imagick();

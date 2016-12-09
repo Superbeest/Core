@@ -89,13 +89,12 @@ class ShadowEffect extends \System\Image\Effect\ImageEffect
     */
     protected final function executeFilterImagick(\Imagick $imageData)
     {
-        $shadow = $imageData->clone();
+        $shadow = clone $imageData;
         $shadow->setImageBackgroundColor(new \ImagickPixel('black'));
 
         $shadow->shadowImage(80, $this->shadowWidth / 4, 0, 0);
 
         $shadow->compositeImage($imageData, \Imagick::COMPOSITE_OVER, 0, 0);
-
 
         return $shadow;
     }
