@@ -154,12 +154,20 @@
 		<xsl:attribute name="href"><xsl:value-of select="name" /><xsl:if test="filesize">?s=<xsl:value-of select="filesize" /></xsl:if></xsl:attribute>
 		<xsl:attribute name="rel"><xsl:value-of select="rel" /></xsl:attribute>
 		<xsl:attribute name="media"><xsl:value-of select="media" /></xsl:attribute>
+		<xsl:if test="crossorigin != '' and integrity != ''">
+			<xsl:attribute name="crossorigin"><xsl:value-of select="crossorigin" /></xsl:attribute>
+			<xsl:attribute name="integrity"><xsl:value-of select="integrity" /></xsl:attribute>
+		</xsl:if>
 	</link>
 </xsl:template>
 
 <xsl:template match="//jsfiles/jsfile">
 	<script>
 		<xsl:attribute name="src"><xsl:value-of select="name" /><xsl:if test="filesize">?s=<xsl:value-of select="filesize" /></xsl:if></xsl:attribute>
+		<xsl:if test="crossorigin != '' and integrity != ''">
+			<xsl:attribute name="crossorigin"><xsl:value-of select="crossorigin" /></xsl:attribute>
+			<xsl:attribute name="integrity"><xsl:value-of select="integrity" /></xsl:attribute>
+		</xsl:if>
 	</script>
 </xsl:template>
 
