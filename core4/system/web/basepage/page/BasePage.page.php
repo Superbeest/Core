@@ -258,42 +258,49 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	* @param string The (full)path to the remote file
 	* @param string The media type, defaults to CSS_MEDIA_SCREEN
 	* @param string The reltype, defaults to CSS_REL_DEFAULT
-        * @param int \System\Web\BasePage\Page\InclusionLocation location for placement
+    * @param int \System\Web\BasePage\Page\InclusionLocation location for placement
+    * @param string the crossOrigin attribute can be set. For more information see: https://www.w3.org/TR/SRI/
+    * @param string the integrity attribute which is used to check if a remote resource is tempered with in combination with the crossorigin tag
 	*/
-	public function addCSSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $media = \System\Web\BasePage\Page\BasePage::CSS_MEDIA_SCREEN, $rel = \System\Web\BasePage\Page\BasePage::CSS_REL_DEFAULT, $location = \System\Web\BasePage\Page\InclusionLocation::LOCATION_HEAD)
+	public function addCSSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $media = \System\Web\BasePage\Page\BasePage::CSS_MEDIA_SCREEN, $rel = \System\Web\BasePage\Page\BasePage::CSS_REL_DEFAULT, $location = \System\Web\BasePage\Page\InclusionLocation::LOCATION_HEAD, $crossOrigin = '', $integrity = '')
 	{
-            if (!isset($xml->cssfiles))
-            {
-                $xml->addChild('cssfiles');
-            }
-            $cssFiles = $xml->cssfiles;
+        if (!isset($xml->cssfiles))
+        {
+            $xml->addChild('cssfiles');
+        }
+        $cssFiles = $xml->cssfiles;
 
-            $cssFile = $cssFiles->addChild('cssfile');
-            $cssFile->addChild('media', $media);
-            $cssFile->addChild('rel', $rel);
+        $cssFile = $cssFiles->addChild('cssfile');
+        $cssFile->addChild('media', $media);
+        $cssFile->addChild('rel', $rel);
 
-            if ($localFile)
+        if ($localFile)
+        {
+            $file = new \System\IO\File($localFile);
+            if ((('.' . $file->getExtension()) == self::CSS_EXTENSION) && //only try to minify css files, not less files
+                (MINIFY_ENABLE) &&
+                (mb_strpos($file->getFilename(), self::CSS_MIN_EXTENSION) === false)) //it is not already minified
             {
-                $file = new \System\IO\File($localFile);
-                if ((('.' . $file->getExtension()) == self::CSS_EXTENSION) && //only try to minify css files, not less files
-                    (MINIFY_ENABLE) &&
-                    (mb_strpos($file->getFilename(), self::CSS_MIN_EXTENSION) === false)) //it is not already minified
+                $localMinFile = $file->getPath() . basename($file->getFilename(), self::CSS_EXTENSION) . self::CSS_MIN_EXTENSION;
+                if (!file_exists($localMinFile))
                 {
-                    $localMinFile = $file->getPath() . basename($file->getFilename(), self::CSS_EXTENSION) . self::CSS_MIN_EXTENSION;
-                    if (!file_exists($localMinFile))
-                    {
-                        $file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\CSS\Minify::minify($file->getContents()));
-                    }
-                    else
-                    {
-                        $file = new \System\IO\File($localMinFile);
-                    }
-                    $remoteFile = str_ireplace(self::CSS_EXTENSION, self::CSS_MIN_EXTENSION, $remoteFile);
+                    $file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\CSS\Minify::minify($file->getContents()));
                 }
-                $cssFile->addChild('filesize', $file->getFileSizeInBytes());
+                else
+                {
+                    $file = new \System\IO\File($localMinFile);
+                }
+                $remoteFile = str_ireplace(self::CSS_EXTENSION, self::CSS_MIN_EXTENSION, $remoteFile);
             }
-            $cssFile->addChild('name', $remoteFile);
-            $cssFile->addChild('location', $location);
+            $cssFile->addChild('filesize', $file->getFileSizeInBytes());
+        }
+        $cssFile->addChild('name', $remoteFile);
+        $cssFile->addChild('location', $location);
+        if ($crossOrigin && $integrity)
+        {
+            $cssFile->addChild('crossorigin', $crossOrigin);
+            $cssFile->addChild('integrity', $integrity);
+		}
 	}
 
 	/**
@@ -362,39 +369,46 @@ abstract class BasePage extends \System\Cache\PageCache\Page
 	* @param \SimpleXMLElement The XML root
 	* @param string The (full)path to the local JS file
 	* @param string The (full)path to the remote file
-        * @param int The \System\Web\BasePage\Page\InclusionLocation for inclusion location
+    * @param int The \System\Web\BasePage\Page\InclusionLocation for inclusion location
+    * @param string the crossOrigin attribute can be set. For more information see: https://www.w3.org/TR/SRI/
+    * @param string the integrity attribute which is used to check if a remote resource is tempered with in combination with the crossorigin tag
 	*/
-	public function addJSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $location = \System\Web\BasePage\Page\InclusionLocation::LOCATION_HEAD)
+	public function addJSFile(\SimpleXMLElement $xml, $localFile, $remoteFile, $location = \System\Web\BasePage\Page\InclusionLocation::LOCATION_HEAD, $crossOrigin = '', $integrity = '')
 	{
-            if (!isset($xml->jsfiles))
-            {
-                $xml->addChild('jsfiles');
-            }
-            $jsFiles = $xml->jsfiles;
+        if (!isset($xml->jsfiles))
+        {
+            $xml->addChild('jsfiles');
+        }
+        $jsFiles = $xml->jsfiles;
 
-            $jsFile = $jsFiles->addChild('jsfile');
-            if ($localFile)
+        $jsFile = $jsFiles->addChild('jsfile');
+        if ($localFile)
+        {
+            $file = new \System\IO\File($localFile);
+            if ((MINIFY_ENABLE) &&
+                (mb_strpos($file->getFilename(), self::JS_MIN_EXTENSION) === false) && //it is not already minified
+                (mb_strpos($file->getFilename(), self::JS_MIN_PACKED) === false)) //it is not packed
             {
-                $file = new \System\IO\File($localFile);
-                if ((MINIFY_ENABLE) &&
-                    (mb_strpos($file->getFilename(), self::JS_MIN_EXTENSION) === false) && //it is not already minified
-                    (mb_strpos($file->getFilename(), self::JS_MIN_PACKED) === false)) //it is not packed
+                $localMinFile = $file->getPath() . basename($file->getFilename(), self::JS_EXTENSION) . self::JS_MIN_EXTENSION;
+                if (!file_exists($localMinFile))
                 {
-                    $localMinFile = $file->getPath() . basename($file->getFilename(), self::JS_EXTENSION) . self::JS_MIN_EXTENSION;
-                    if (!file_exists($localMinFile))
-                    {
-                        $file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\JS\Minify::minify($file->getContents()));
-                    }
-                    else
-                    {
-                        $file = new \System\IO\File($localMinFile);
-                    }
-                    $remoteFile = str_ireplace(self::JS_EXTENSION, self::JS_MIN_EXTENSION, $remoteFile);
+                    $file = \System\IO\File::writeContents($localMinFile, \System\Web\Minify\JS\Minify::minify($file->getContents()));
                 }
-                $jsFile->addChild('filesize', $file->getFileSizeInBytes());
+                else
+                {
+                    $file = new \System\IO\File($localMinFile);
+                }
+                $remoteFile = str_ireplace(self::JS_EXTENSION, self::JS_MIN_EXTENSION, $remoteFile);
             }
-            $jsFile->addChild('name', $remoteFile);
-            $jsFile->addChild('location', $location);
+            $jsFile->addChild('filesize', $file->getFileSizeInBytes());
+        }
+        $jsFile->addChild('name', $remoteFile);
+        $jsFile->addChild('location', $location);
+        if ($crossOrigin && $integrity)
+        {
+            $jsFile->addChild('crossorigin', $crossOrigin);
+            $jsFile->addChild('integrity', $integrity);
+		}
 	}
 
 	/**
