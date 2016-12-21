@@ -334,7 +334,21 @@ final class Meta extends \System\Base\BaseObj
 		$this->Collation = $collation;
 	}
 
-	/**
+      /**
+    * Returns a Vector with all tablesnames from the requested database
+    * @param \System\Db\Database the database to query
+    * @return \System\Collection\Vector a vector containing all tablenames
+    */
+	public static final function getTableNamesFromDatabase(\System\Db\Database $db, $databaseName)
+    {
+        $query = new \System\Db\Query($db, 'SHOW TABLES IN %?%');
+        $query->bind($databaseName, \System\Db\QueryType::TYPE_QUERY);
+        $results = $db->queryScalar($query);
+
+        return $results;
+    }
+    
+    /**
 	* Returns a Vector with all tablesnames from the current database
 	* @param \System\Db\Database the database to query
 	* @param string A prefix for the tables. No prefix returns all

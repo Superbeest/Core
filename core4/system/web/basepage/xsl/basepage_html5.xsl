@@ -99,7 +99,7 @@
 		<xsl:attribute name="content"><xsl:choose><xsl:when test="/document/keywords"><xsl:value-of select="/document/keywords" disable-output-escaping="yes" /></xsl:when><xsl:otherwise><xsl:value-of select="$keywords" disable-output-escaping="yes" /></xsl:otherwise></xsl:choose></xsl:attribute>
 	</meta>
 	<meta name="author">
-		<xsl:attribute name="content">copyright(c) <xsl:value-of select="$year" /> - <xsl:value-of select="$company" /></xsl:attribute>
+		<xsl:attribute name="content"><xsl:value-of select="$company" /></xsl:attribute>
 	</meta>
 	<meta name="robots" content="all" />
 	<meta name="revisit-after">

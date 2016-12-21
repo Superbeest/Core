@@ -127,7 +127,7 @@ final class EmailSystem extends \System\Base\StaticBase
     {
         $smtp = self::getSMTPConnection();
 
-        $attachments = new \System\Collection\Vector();
+        $attachments = new \System\Collection\SecureVector();
         foreach ($message->getAttachments() as $attachment)
         {
             if (!$attachment instanceof \System\IO\File)
@@ -293,7 +293,7 @@ final class EmailSystem extends \System\Base\StaticBase
     * @param string The (html) mail to use. Plain text variant gets generated automatically.
     * @param \System\Collection\Vector The attachments to send.
     */
-    private final static function dispatchSingleMail(\System\Email\SMTP $smtp, $from, array $to, array $cc = array(), array $bcc = array(), $subject, $message, \System\Collection\Vector $attachments)
+    private final static function dispatchSingleMail(\System\Email\SMTP $smtp, $from, array $to, array $cc = array(), array $bcc = array(), $subject, $message, \System\Collection\SecureVector $attachments)
     {
         $smtp->sendCommand('MAIL FROM: <' . $from . '>');
 
